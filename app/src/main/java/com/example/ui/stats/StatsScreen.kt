@@ -35,6 +35,7 @@ import androidx.compose.material.icons.filled.LocalDrink
 import androidx.compose.material.icons.filled.RateReview
 import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -61,7 +62,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import com.example.share.ShareHelper
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -78,6 +81,7 @@ fun StatsScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     BackHandler { onNavigateBack() }
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -452,6 +456,34 @@ fun StatsScreen(
                                 }
 
                                 Row {
+                                    IconButton(
+                                        onClick = {
+                                            val shareTitle = "Revisión Semanal L2 Life (${state.currentWeekLabel})"
+                                            val shareText = buildString {
+                                                appendLine("📊 $shareTitle")
+                                                appendLine("• Energía: ${review.energyRating}/5 | Foco: ${review.productivityRating}/5")
+                                                if (review.accomplishments.isNotBlank()) {
+                                                    appendLine("\nLogros:")
+                                                    appendLine(review.accomplishments)
+                                                }
+                                                if (review.challenges.isNotBlank()) {
+                                                    appendLine("\nRetos:")
+                                                    appendLine(review.challenges)
+                                                }
+                                                if (review.nextWeekFocus.isNotBlank()) {
+                                                    appendLine("\nPróxima semana:")
+                                                    appendLine(review.nextWeekFocus)
+                                                }
+                                                appendLine("\n— Enviado desde L2 Life")
+                                            }
+                                            ShareHelper.shareText(context, shareTitle, shareText)
+                                        },
+                                        modifier = Modifier
+                                            .size(36.dp)
+                                            .testTag("share_weekly_review_button")
+                                    ) {
+                                        Icon(Icons.Filled.Share, contentDescription = "Compartir revisión", modifier = Modifier.size(18.dp))
+                                    }
                                     IconButton(
                                         onClick = { viewModel.openReviewEditor(review) },
                                         modifier = Modifier

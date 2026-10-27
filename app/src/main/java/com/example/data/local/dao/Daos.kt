@@ -67,6 +67,9 @@ interface TaskDao {
     @Query("SELECT COUNT(*) FROM tasks WHERE status = 'COMPLETED' AND completedAt >= :startOfDay")
     fun observeCompletedTodayCount(startOfDay: Long): Flow<Int>
 
+    @Query("SELECT * FROM tasks WHERE status != 'COMPLETED' AND status != 'CANCELLED' AND (scheduledDate > :now OR dueDate > :now)")
+    suspend fun getPendingTasksWithReminders(now: Long): List<TaskEntity>
+
     @Query("SELECT COUNT(*) FROM tasks")
     suspend fun countAllTasks(): Int
 

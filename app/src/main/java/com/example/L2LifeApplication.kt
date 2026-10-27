@@ -116,6 +116,12 @@ class L2LifeApplication : Application() {
             learningDao = database.learningDao(),
             personDao = database.personDao()
         )
+
+        // Etapa 5 — Integración con Android
+        com.example.notification.NotificationHelper.createNotificationChannels(this)
+        com.example.scheduler.ReminderScheduler.scheduleDailyMidnightCheck(this)
+        com.example.shortcut.ShortcutHelper.updateDynamicShortcuts(this)
+        com.example.widget.WidgetUpdateHelper.updateAllWidgets(this)
     }
 }
 

@@ -54,41 +54,38 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.domain.model.HomeSectionId
-import com.example.domain.model.NoteItem
-import com.example.domain.model.TaskItem
-import com.example.ui.capture.QuickCaptureBottomSheet
-import com.example.ui.components.L2EmptyState
-import com.example.ui.components.L2PriorityChip
-import com.example.ui.components.L2SectionHeader
-import com.example.ui.theme.HabitGreen
-import com.example.ui.theme.WaterBlue
+import androidx.compose.ui.platform.LocalContext
+import com.example.widget.WidgetUpdateHelper
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
     onNavigateToSearch: () -> Unit,
     onNavigateToModules: () -> Unit,
+    initialQuickCaptureTab: String? = null,
+    sharedIncomingText: String? = null,
+    onClearIncomingIntent: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    var showQuickCapture by remember { mutableStateOf(false) }
+    var showQuickCapture by remember { mutableStateOf(initialQuickCaptureTab != null || !sharedIncomingText.isNullOrBlank()) }
+    var captureTab by remember { mutableStateOf(initialQuickCaptureTab) }
+    var captureContent by remember { mutableStateOf(sharedIncomingText ?: "") }
+
+    LaunchedEffect(initialQuickCaptureTab, sharedIncomingText) {
+        if (initialQuickCaptureTab != null || !sharedIncomingText.isNullOrBlank()) {
+            captureTab = initialQuickCaptureTab
+            captureContent = sharedIncomingText ?: ""
+            showQuickCapture = true
+            onClearIncomingIntent()
+        }
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -315,18 +312,27 @@ fun HomeScreen(
 
     if (showQuickCapture) {
         QuickCaptureBottomSheet(
-            onDismiss = { showQuickCapture = false },
+            onDismiss = {
+                showQuickCapture = false
+                captureTab = null
+                captureContent = ""
+            },
+            initialTab = captureTab,
+            initialContent = captureContent,
             onCreateTask = { title, desc, priority, category ->
                 viewModel.createTask(title, desc, priority, category)
+                WidgetUpdateHelper.updateAllWidgets(context)
             },
             onCreateHabit = { title, target, unit, isPositive ->
                 viewModel.createHabit(title, target, unit, isPositive)
+                WidgetUpdateHelper.updateAllWidgets(context)
             },
             onCreateNote = { title, content, category ->
                 viewModel.createNote(title, content, category)
             },
             onLogWater = { amountMl ->
                 viewModel.logWater(amountMl)
+                WidgetUpdateHelper.updateAllWidgets(context)
             }
         )
     }

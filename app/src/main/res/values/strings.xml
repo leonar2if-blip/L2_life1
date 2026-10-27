@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">L2 Life</string>
+
+    <!-- Shortcuts -->
+    <string name="shortcut_task_short">Nueva Tarea</string>
+    <string name="shortcut_task_long">Crear nueva tarea en L2 Life</string>
+    <string name="shortcut_note_short">Nueva Nota</string>
+    <string name="shortcut_note_long">Capturar nota rápida</string>
+    <string name="shortcut_focus_short">Sesión Focus</string>
+    <string name="shortcut_focus_long">Iniciar temporizador Pomodoro</string>
+    <string name="shortcut_diary_short">Diario de Hoy</string>
+    <string name="shortcut_diary_long">Escribir o revisar el diario de hoy</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_reminders">Recordatorios y Tareas</string>
+    <string name="notification_channel_reminders_desc">Avisos y recordatorios programados de tareas</string>
+    <string name="notification_channel_focus">Temporizador de Enfoque</string>
+    <string name="notification_channel_focus_desc">Estado y finalización del temporizador Pomodoro</string>
+    <string name="notification_channel_daily">Resumen Diario</string>
+    <string name="notification_channel_daily_desc">Resúmenes y rutinas del día</string>
+    <string name="notification_action_complete">✓ Completar</string>
+    <string name="notification_action_snooze">⏱ Posponer 15m</string>
 </resources>

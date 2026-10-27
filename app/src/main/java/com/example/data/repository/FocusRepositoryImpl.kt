@@ -9,6 +9,7 @@ import com.example.domain.model.FocusMode
 import com.example.domain.model.FocusSessionItem
 import com.example.domain.model.TaskStatus
 import com.example.domain.repository.FocusRepository
+import java.time.LocalDate
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,7 +21,7 @@ class FocusRepositoryImpl(
 ) : FocusRepository {
 
     private val currentEpochDay: Long
-        get() = System.currentTimeMillis() / 86400000L
+        get() = LocalDate.now().toEpochDay()
 
     override fun observeAllSessions(): Flow<List<FocusSessionItem>> {
         return focusDao.observeAllSessions().map { list ->
@@ -52,7 +53,7 @@ class FocusRepositoryImpl(
         markTaskCompleted: Boolean
     ): FocusSessionItem {
         val now = System.currentTimeMillis()
-        val epochDay = now / 86400000L
+        val epochDay = LocalDate.now().toEpochDay()
         val sessionId = UUID.randomUUID().toString()
 
         var taskTitle: String? = null

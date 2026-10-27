@@ -77,15 +77,24 @@ fun QuickCaptureBottomSheet(
     onCreateHabit: (title: String, target: Double, unit: String, isPositive: Boolean) -> Unit,
     onCreateNote: (title: String, content: String, category: String) -> Unit,
     onLogWater: (amountMl: Int) -> Unit,
+    initialTab: String? = null,
+    initialTitle: String = "",
+    initialContent: String = "",
     modifier: Modifier = Modifier
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
-    var selectedTab by remember { mutableStateOf(CaptureTab.TASK) }
+    val defaultTab = when (initialTab?.uppercase()) {
+        "NOTE" -> CaptureTab.NOTE
+        "HABIT" -> CaptureTab.HABIT
+        "WATER" -> CaptureTab.WATER
+        else -> CaptureTab.TASK
+    }
+    var selectedTab by remember { mutableStateOf(defaultTab) }
 
     // Task inputs
-    var taskTitle by remember { mutableStateOf("") }
-    var taskDesc by remember { mutableStateOf("") }
+    var taskTitle by remember { mutableStateOf(if (defaultTab == CaptureTab.TASK) initialTitle.ifBlank { initialContent } else "") }
+    var taskDesc by remember { mutableStateOf(if (defaultTab == CaptureTab.TASK && initialTitle.isNotBlank()) initialContent else "") }
     var taskPriority by remember { mutableStateOf(Priority.MEDIUM) }
     var taskCategory by remember { mutableStateOf("Personal") }
 
@@ -95,8 +104,8 @@ fun QuickCaptureBottomSheet(
     var habitIsPositive by remember { mutableStateOf(true) }
 
     // Note inputs
-    var noteTitle by remember { mutableStateOf("") }
-    var noteContent by remember { mutableStateOf("") }
+    var noteTitle by remember { mutableStateOf(if (defaultTab == CaptureTab.NOTE) initialTitle else "") }
+    var noteContent by remember { mutableStateOf(if (defaultTab == CaptureTab.NOTE) initialContent else "") }
     var noteCategory by remember { mutableStateOf("Ideas") }
 
     ModalBottomSheet(

@@ -1,5 +1,6 @@
 package com.example
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -57,15 +59,25 @@ import com.example.ui.stats.StatsViewModel
 import com.example.ui.stats.StatsViewModelFactory
 import com.example.ui.theme.L2LifeTheme
 import com.example.ui.theme.ThemeSetting
+import com.example.shortcut.ShortcutHelper
+import com.example.widget.WidgetUpdateHelper
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
+
+    private val incomingActionState = MutableStateFlow<String?>(null)
+    private val incomingSharedTextState = MutableStateFlow<String?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        handleIntent(intent)
         enableEdgeToEdge()
 
         val app = application as L2LifeApplication
 
         setContent {
+            val incomingAction by incomingActionState.collectAsStateWithLifecycle()
+            val incomingSharedText by incomingSharedTextState.collectAsStateWithLifecycle()
             val settingsViewModel: SettingsViewModel = viewModel(
                 factory = SettingsViewModelFactory(
                     preferenceRepository = app.preferenceRepository,
@@ -87,6 +99,23 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
+
+                LaunchedEffect(incomingAction) {
+                    when (incomingAction) {
+                        ShortcutHelper.ACTION_FOCUS_TIMER -> {
+                            navController.navigate(Screen.Focus.route)
+                            incomingActionState.value = null
+                        }
+                        ShortcutHelper.ACTION_DIARY_TODAY -> {
+                            navController.navigate(Screen.Diary.route)
+                            incomingActionState.value = null
+                        }
+                        ShortcutHelper.ACTION_QUICK_TASK,
+                        ShortcutHelper.ACTION_QUICK_NOTE -> {
+                            navController.navigate(Screen.Home.route)
+                        }
+                    }
+                }
 
                 val homeViewModel: HomeViewModel = viewModel(
                     factory = HomeViewModelFactory(
@@ -183,7 +212,17 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(
                                 viewModel = homeViewModel,
                                 onNavigateToSearch = { navController.navigate(Screen.Search.route) },
-                                onNavigateToModules = { navController.navigate(Screen.Modules.route) }
+                                onNavigateToModules = { navController.navigate(Screen.Modules.route) },
+                                initialQuickCaptureTab = when (incomingAction) {
+                                    ShortcutHelper.ACTION_QUICK_NOTE -> "NOTE"
+                                    ShortcutHelper.ACTION_QUICK_TASK -> "TASK"
+                                    else -> null
+                                },
+                                sharedIncomingText = incomingSharedText,
+                                onClearIncomingIntent = {
+                                    incomingActionState.value = null
+                                    incomingSharedTextState.value = null
+                                }
                             )
                         }
 
@@ -278,6 +317,37 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntent(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        WidgetUpdateHelper.updateAllWidgets(this)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        if (intent == null) return
+        when (intent.action) {
+            Intent.ACTION_SEND -> {
+                val text = intent.getStringExtra(Intent.EXTRA_TEXT)
+                    ?: intent.getStringExtra(Intent.EXTRA_SUBJECT)
+                if (!text.isNullOrBlank()) {
+                    incomingActionState.value = ShortcutHelper.ACTION_QUICK_NOTE
+                    incomingSharedTextState.value = text
+                }
+            }
+            ShortcutHelper.ACTION_QUICK_TASK,
+            ShortcutHelper.ACTION_QUICK_NOTE,
+            ShortcutHelper.ACTION_FOCUS_TIMER,
+            ShortcutHelper.ACTION_DIARY_TODAY -> {
+                incomingActionState.value = intent.action
             }
         }
     }

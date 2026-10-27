@@ -14,9 +14,9 @@ import com.example.domain.model.GoalStatus
 import com.example.domain.model.WeeklyReviewItem
 import com.example.domain.model.WeeklyStatsSummary
 import com.example.domain.repository.StatsRepository
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
@@ -36,8 +36,10 @@ class StatsRepositoryImpl(
 ) : StatsRepository {
 
     override fun observeWeeklyStats(startEpochDay: Long, endEpochDay: Long): Flow<WeeklyStatsSummary> {
-        val startMillis = startEpochDay * 86400000L
-        val endMillis = (endEpochDay + 1) * 86400000L - 1
+        val zone = ZoneId.systemDefault()
+        val startMillis = LocalDate.ofEpochDay(startEpochDay).atStartOfDay(zone).toInstant().toEpochMilli()
+        val endMillis = LocalDate.ofEpochDay(endEpochDay).plusDays(1).atStartOfDay(zone)
+            .toInstant().toEpochMilli() - 1
 
         val flow1 = combine(
             taskDao.observeCompletedTasksBetween(startMillis, endMillis),
@@ -110,12 +112,13 @@ class StatsRepositoryImpl(
             val totalWaterMl = waterLogs.sumOf { it.numericValue.toInt() }
             val avgWaterMl = (totalWaterMl / totalDays).toInt()
 
-            val dayFormatter = SimpleDateFormat("EEE", Locale("es", "ES"))
+            val dayFormatter = DateTimeFormatter.ofPattern("EEE", Locale("es", "ES"))
+            val zone = ZoneId.systemDefault()
             val dailyPoints = (startEpochDay..endEpochDay).map { epochDay ->
-                val dayStartMillis = epochDay * 86400000L
-                val dayEndMillis = (epochDay + 1) * 86400000L - 1
-                val cal = Calendar.getInstance().apply { timeInMillis = dayStartMillis }
-                val label = dayFormatter.format(cal.time).replace(".", "").replaceFirstChar { it.uppercase() }
+                val date = LocalDate.ofEpochDay(epochDay)
+                val dayStartMillis = date.atStartOfDay(zone).toInstant().toEpochMilli()
+                val dayEndMillis = date.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli() - 1
+                val label = date.format(dayFormatter).replace(".", "").replaceFirstChar { it.uppercase() }
 
                 val dayTasks = completedTasks.count {
                     it.completedAt != null && it.completedAt in dayStartMillis..dayEndMillis
@@ -190,10 +193,8 @@ class StatsRepositoryImpl(
     override suspend fun generateReviewDraft(weekStartEpochDay: Long, weekEndEpochDay: Long): String {
         val stats = observeWeeklyStats(weekStartEpochDay, weekEndEpochDay).first()
 
-        val startCal = Calendar.getInstance().apply { timeInMillis = weekStartEpochDay * 86400000L }
-        val endCal = Calendar.getInstance().apply { timeInMillis = weekEndEpochDay * 86400000L }
-        val dateFmt = SimpleDateFormat("d 'de' MMMM", Locale("es", "ES"))
-        val rangeStr = "${dateFmt.format(startCal.time)} al ${dateFmt.format(endCal.time)}"
+        val dateFmt = DateTimeFormatter.ofPattern("d 'de' MMMM", Locale("es", "ES"))
+        val rangeStr = "${LocalDate.ofEpochDay(weekStartEpochDay).format(dateFmt)} al ${LocalDate.ofEpochDay(weekEndEpochDay).format(dateFmt)}"
 
         val consistencyStr = if (stats.habitsConsistencyRate != null) {
             "${(stats.habitsConsistencyRate * 100).toInt()}%"
