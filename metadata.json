@@ -1,0 +1,6 @@
+{
+  "name": "L2 Life",
+  "description": "Organización integral personal y laboral: tareas, hábitos, notas, bienestar y captura rápida offline-first.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

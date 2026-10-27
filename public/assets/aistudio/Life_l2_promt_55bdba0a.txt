@@ -1,0 +1,486 @@
+PROMPT MAESTRO — L2 LIFE
+Construcción de una aplicación Android integral de organización personal
+1. INSTRUCCIÓN PRINCIPAL
+Construye una aplicación Android real llamada provisionalmente L2 Life, diseñada para ayudar a una persona a organizar su vida cotidiana desde un único lugar.
+No quiero una página web que imite una aplicación móvil, una simple maqueta, una presentación interactiva ni una colección de pantallas desconectadas.
+Quiero un proyecto Android que pueda compilarse, instalarse, probarse, modificarse y ampliarse.
+La aplicación debe tener una experiencia visual moderna y profesional, pero su prioridad es que las funciones sean reales, los datos persistan y los módulos se integren correctamente.
+No intentes terminar todas las funciones complejas mediante simulaciones en una única generación. Construye una base funcional, conserva una arquitectura preparada para crecer y desarrolla el producto progresivamente sin perder coherencia.
+No te limites a responder con un plan o una lista de recomendaciones: inspecciona las capacidades disponibles, genera el proyecto inicial y comienza a implementar la aplicación.
+2. PERFIL DEL PRODUCTO
+L2 Life es una aplicación individual para gestionar la vida personal y laboral.
+Debe reunir en un sistema coherente:
+• Tareas y pendientes.
+• Proyectos.
+• Calendario.
+• Hábitos positivos y negativos.
+• Rutinas.
+• Notas y diario.
+• Objetivos.
+• Estadísticas.
+• Bienestar y registros personales.
+• Aprendizaje.
+• Relaciones y personas importantes.
+• Recordatorios, alarmas y temporizadores.
+• Captura rápida de información.
+• Copias de seguridad y exportación.
+• Configuración, privacidad y personalización.
+El dinero y las finanzas quedan como módulo reservado, pendiente de decisión definitiva. No inventes funciones financieras ni las presentes como parte ya aprobada del alcance inicial.
+La aplicación debe inspirarse en la profundidad de organización de herramientas como Lunatask, sin copiar literalmente su diseño, identidad visual ni elementos propietarios.
+Debe sentirse como un producto único, no como varias aplicaciones pegadas entre sí.
+3. PRINCIPIOS FUNDAMENTALES
+1. Offline-first: las funciones esenciales deben funcionar sin conexión.
+2. Persistencia real: los datos confirmados deben guardarse de manera duradera.
+3. Control del usuario: las automatizaciones recomiendan; el usuario decide.
+4. Modularidad: los módulos pueden mostrarse, ocultarse, ordenarse y configurarse.
+5. Rapidez: las acciones cotidianas deben requerir pocos pasos.
+6. Coherencia: las entidades relacionadas comparten datos y reglas.
+7. Personalización: la aplicación se adapta a la organización del usuario.
+8. Privacidad: los datos personales permanecen localmente salvo que el usuario habilite una función externa.
+9. Honestidad funcional: no simular persistencia, sincronización, notificaciones o análisis.
+10. Evolución segura: añadir funciones no debe romper las existentes.
+No incorporar un asistente de inteligencia artificial como dependencia del funcionamiento inicial. Las reglas, cálculos y recomendaciones iniciales deben basarse en lógica determinista y datos disponibles.
+4. PLATAFORMA Y ARQUITECTURA
+Prioriza una aplicación Android nativa. Si el entorno lo permite, utiliza Kotlin y Jetpack Compose.
+Antes de comenzar, comprueba las tecnologías, dependencias y capacidades realmente disponibles en el entorno de generación. No afirmes haber creado archivos, ejecutado pruebas o compilado el proyecto si no lo has hecho.
+Organiza el código con responsabilidades separadas:
+• Presentación y componentes visuales.
+• Navegación.
+• Modelos de dominio y reglas de negocio.
+• Casos de uso.
+• Repositorios y persistencia local.
+• Notificaciones y tareas programadas.
+• Copias de seguridad, importación y exportación.
+• Configuración y preferencias.
+Utiliza una base de datos local adecuada para Android, preferiblemente Room sobre SQLite si es compatible con el proyecto.
+Usa coroutines y Flow cuando correspondan. Mantén el estado de la interfaz sincronizado con los datos persistidos.
+Utiliza ViewModel y una arquitectura modular razonable, evitando tanto el código monolítico como la complejidad innecesaria.
+No añadas servicios externos, cuentas obligatorias ni claves API para las funciones esenciales.
+La sincronización remota queda como función opcional futura. La aplicación no debe depender de ella para arrancar o funcionar.
+5. IDENTIDAD VISUAL Y EXPERIENCIA
+Crea un lenguaje visual propio, moderno, elegante y funcional.
+Debe transmitir claridad, tranquilidad, control y progreso, evitando que la aplicación parezca una hoja de cálculo o un panel empresarial saturado.
+Características:
+• Diseño limpio con jerarquía visual clara.
+• Tipografía legible.
+• Espaciado consistente.
+• Iconografía coherente.
+• Superficies y tarjetas utilizadas con moderación.
+• Estados visuales claros para tareas completadas, vencidas, pendientes y prioritarias.
+• Animaciones discretas y útiles.
+• Transiciones suaves entre pantallas.
+• Feedback inmediato para las acciones.
+• Formularios breves y progresivos.
+• Tema claro y oscuro.
+• Paleta de colores adaptable.
+• Contraste y accesibilidad adecuados.
+• Diseños adaptables a diferentes tamaños de pantalla.
+No uses el mismo diseño de tarjeta para absolutamente todo. El calendario, las estadísticas, los hábitos, las notas y los proyectos deben aprovechar patrones visuales adecuados a cada contenido.
+No satures la pantalla de inicio. Prioriza información útil, jerarquía y acceso rápido.
+Incluye estados vacíos, mensajes de error, confirmaciones, indicadores de carga y estados de guardado.
+Los elementos visuales que parezcan interactivos deben realizar la acción indicada.
+6. NAVEGACIÓN PRINCIPAL
+Diseña una navegación sencilla y consistente.
+La aplicación debe incluir:
+• Inicio.
+• Acceso a los módulos.
+• Búsqueda global.
+• Captura rápida.
+• Notificaciones y recordatorios.
+• Configuración.
+La navegación puede combinar barra inferior, menú de módulos y acciones contextuales según lo que resulte más usable.
+No intentes colocar todos los módulos en una barra inferior. Utiliza una estructura que permita acceder a todo sin saturar la interfaz.
+Las pantallas deben conservar un comportamiento de navegación predecible y gestionar correctamente Atrás, reapertura y cambios de configuración.
+7. INICIO CONFIGURABLE
+La pantalla de inicio es el centro de control diario.
+Debe poder mostrar, mediante secciones configurables:
+• Resumen del día.
+• Próximas actividades.
+• Tareas pendientes.
+• Hábitos programados.
+• Rutinas.
+• Eventos del calendario.
+• Notas recientes.
+• Registro rápido de agua.
+• Objetivos y progreso.
+• Resumen de bienestar.
+• Accesos a estadísticas.
+• Captura rápida.
+Permite al usuario activar, desactivar y ordenar las secciones.
+Evita mostrar bloques vacíos innecesarios. Si una sección no tiene contenido, ofrece una acción útil para empezar o permite ocultarla.
+Los datos de cada sección deben proceder de los módulos reales.
+Añade un resumen diario calculado a partir de registros existentes, sin inventar actividades ni resultados.
+8. TAREAS
+Implementa un módulo completo de tareas.
+Tipos iniciales:
+• Personal.
+• Trabajo.
+• Hogar.
+• Proyecto.
+• Recurrente.
+• Llamadas.
+• Compras.
+• Personalizado.
+Cada tarea puede incluir:
+• Título y descripción.
+• Prioridad.
+• Estado.
+• Fecha límite.
+• Fecha y hora programadas.
+• Duración estimada.
+• Subtareas.
+• Recordatorios.
+• Categoría y etiquetas.
+• Ubicación.
+• Nivel de energía requerido.
+• Persona relacionada.
+• Proyecto relacionado.
+• Dependencias.
+• Fecha de creación y finalización.
+• Historial de cambios relevante.
+Permite crear, consultar, editar, completar, reabrir, posponer y eliminar tareas.
+Implementa estados coherentes, como pendiente, en curso, completada y cancelada. El vencimiento debe derivarse de las fechas y reglas aplicables, sin destruir el estado original.
+Admite recurrencias diarias, semanales, mensuales y personalizadas. Define claramente cómo se generan las siguientes ocurrencias y evita duplicados.
+Incluye vistas de lista, calendario, tablero y línea temporal cuando corresponda.
+Las tareas vencidas pueden generar sugerencias de reprogramación. No cambies automáticamente fechas importantes.
+Las dependencias deben impedir o advertir sobre secuencias imposibles. Si se completa, retrasa o cancela una tarea, evalúa las consecuencias sin modificar silenciosamente las tareas dependientes.
+9. PROYECTOS
+Un proyecto agrupa tareas, subtareas, hitos, notas y objetivos relacionados.
+Cada proyecto puede tener:
+• Nombre y descripción.
+• Estado.
+• Fecha de inicio.
+• Fecha objetivo.
+• Prioridad.
+• Categoría.
+• Tareas vinculadas.
+• Hitos.
+• Notas relacionadas.
+• Progreso calculado.
+• Historial de actividad.
+Permite ver el avance, las tareas pendientes y los obstáculos.
+El progreso debe basarse en reglas explícitas y datos reales. No uses porcentajes ficticios.
+Permite detectar retrasos y recomendar acciones.
+Un proyecto completado debe conservar su historial y poder consultarse posteriormente.
+10. CALENDARIO Y GESTIÓN DEL TIEMPO
+Incluye vistas:
+• Día.
+• Semana.
+• Mes.
+• Agenda.
+Muestra tareas programadas, eventos y actividades con fecha.
+Permite navegar entre periodos, consultar detalles y abrir el elemento original.
+Distingue entre una fecha límite y una hora reservada para realizar una actividad.
+Evita duplicar la misma tarea en la base de datos por aparecer en varias vistas.
+Permite registrar actividades y duración real cuando el usuario lo decida.
+La aplicación puede detectar solapamientos entre eventos, tareas y periodos reservados, mostrando advertencias comprensibles.
+11. HÁBITOS POSITIVOS Y NEGATIVOS
+Admite hábitos binarios y medibles.
+Ejemplos de medición:
+• Completado o no completado.
+• Cantidad.
+• Duración.
+• Repeticiones.
+• Unidad personalizada.
+Para hábitos positivos, registra cumplimiento, objetivo, frecuencia y evolución.
+Para hábitos que se desea reducir o evitar, permite registrar tanto los días sin ocurrencias como las ocurrencias. No conviertas automáticamente una ocurrencia en una valoración moral o un fracaso definitivo.
+Incluye:
+• Frecuencia configurable.
+• Objetivos semanales.
+• Días de descanso.
+• Historial.
+• Calendario de cumplimiento.
+• Rachas cuando sean pertinentes.
+• Tendencias.
+• Recordatorios adaptables mediante reglas transparentes.
+• Revisión de objetivos.
+No castigues los días de descanso programados. Diferencia un día no programado, un día de descanso y un registro omitido.
+No confundas falta de datos con incumplimiento.
+12. RUTINAS
+Permite crear rutinas de:
+• Mañana.
+• Trabajo.
+• Tarde.
+• Noche.
+• Fin de semana.
+• Personalizadas.
+Cada rutina puede contener pasos ordenados, duración estimada, tareas o hábitos relacionados, recordatorios y reglas de repetición.
+Permite iniciar una rutina, marcar pasos y registrar su finalización.
+Debe ser posible pausar, omitir un paso o abandonar una rutina sin perder el historial registrado.
+Las rutinas deben facilitar la ejecución, no convertirse en una obligación rígida.
+13. NOTAS, IDEAS Y DIARIO
+El módulo de notas debe admitir:
+• Notas rápidas.
+• Ideas.
+• Reuniones.
+• Aprendizaje.
+• Referencias.
+• Listas.
+• Notas asociadas a proyectos.
+• Notas asociadas a tareas.
+• Entradas de diario.
+Incluye etiquetas, búsqueda, fechas y relaciones con otras entidades.
+Permite guardar enlaces, listas de comprobación y tablas sencillas. Los archivos adjuntos deben utilizar almacenamiento y permisos adecuados, y deben sobrevivir al cierre de la aplicación.
+No declares compatible un tipo de contenido si solo se guarda su nombre o una representación que después no puede recuperarse.
+Una nota debe poder convertirse en tarea o vincularse a un proyecto sin duplicar innecesariamente el contenido original.
+El diario puede proponer un resumen del día a partir de tareas, hábitos y eventos registrados. El resumen debe ser editable, mostrar de dónde proviene la información y guardarse únicamente cuando el usuario lo confirme.
+No generes contenido ficticio para rellenar el diario.
+14. OBJETIVOS
+Admite objetivos a corto, medio y largo plazo.
+Los objetivos pueden pertenecer a áreas como:
+• Personal.
+• Trabajo.
+• Salud y bienestar.
+• Aprendizaje.
+• Relaciones.
+• Hábitos.
+• Gestión del tiempo.
+• Categorías personalizadas.
+Cada objetivo puede incluir descripción, periodo, fecha objetivo, métrica, valor inicial, valor deseado, hitos y estado.
+Permite relacionar objetivos con proyectos, tareas y hábitos.
+Muestra progreso calculado, hitos alcanzados y desviaciones respecto al plan.
+Permite ajustar objetivos y registrar cambios sin borrar el historial anterior.
+La aplicación puede sugerir dividir un objetivo grande en pasos más pequeños. No debe crear decenas de tareas automáticamente sin confirmación.
+15. ESTADÍSTICAS Y REVISIONES
+Las estadísticas son una parte importante del producto.
+Incluye análisis de:
+• Tareas completadas y pendientes.
+• Cumplimiento de hábitos.
+• Consistencia y recuperación.
+• Tiempo registrado.
+• Progreso de objetivos.
+• Actividad por áreas de vida.
+• Tendencias.
+• Distribución de tiempo.
+• Comparación entre periodos.
+• Balance general.
+• Relaciones estadísticas entre variables registradas.
+Ofrece revisiones semanales y mensuales.
+Distingue datos reales, valores estimados y datos insuficientes.
+Permite correcciones manuales justificadas cuando el cálculo automático no refleje la realidad.
+Los gráficos deben tener etiquetas legibles, periodos claros y cálculos correctos. Si no existen datos suficientes, muestra un estado vacío explicativo en lugar de un gráfico engañoso.
+Las alertas proactivas deben ser configurables, comprensibles y poco invasivas.
+Cuando se analicen variables como sueño, energía, estado de ánimo y productividad, describe posibles correlaciones sin afirmar causalidad.
+16. BIENESTAR Y REGISTROS PERSONALES
+Permite registrar:
+• Agua.
+• Sueño.
+• Actividad física.
+• Energía.
+• Estado de ánimo.
+• Alimentación.
+• Otros registros personalizados.
+Cada registro puede tener hora, cantidad, unidad, nota y campos adicionales opcionales.
+La captura básica debe ser rápida. Los detalles adicionales no deben ser obligatorios salvo cuando sean necesarios para la integridad del registro.
+Incluye vistas de historial, tendencias y relación con objetivos.
+No presentes diagnósticos médicos ni recomendaciones clínicas. La finalidad es el seguimiento personal.
+Permite definir objetivos de registro y recordatorios configurables, sin imponer cantidades universales como si fueran apropiadas para todo el mundo.
+17. APRENDIZAJE
+Crea un módulo para organizar conocimientos y actividades de aprendizaje.
+Debe poder relacionar temas, recursos, notas, sesiones de estudio, tareas y objetivos.
+Permite registrar tiempo de estudio, progreso, recursos consultados y próximos pasos.
+Incluye listas y vistas de seguimiento adecuadas al contenido.
+Los datos de aprendizaje deben integrarse con la búsqueda global, el calendario, las tareas y las estadísticas.
+No inventes cursos, recursos ni avances.
+18. RELACIONES Y PERSONAS
+Permite guardar personas relevantes y relacionarlas con tareas, proyectos, notas, eventos y recordatorios.
+Los registros pueden incluir nombre, alias, categoría, fechas importantes, notas y próximas acciones.
+Los campos deben ser opcionales cuando no sean necesarios.
+Evita crear perfiles excesivamente invasivos o recopilar información sensible innecesaria.
+La función principal es ayudar a recordar compromisos y mantener el seguimiento personal.
+No envíes mensajes ni contactes a otras personas automáticamente.
+19. CAPTURA RÁPIDA Y BÚSQUEDA GLOBAL
+Incluye un mecanismo de captura accesible desde Inicio y otras pantallas.
+Permite crear rápidamente una tarea, nota, idea, recordatorio u otro registro admitido.
+Siempre que sea viable, ofrece accesos mediante atajos de Android y la recepción de texto o enlaces compartidos desde otras aplicaciones.
+Los datos interpretados automáticamente, como fechas sugeridas a partir de expresiones de lenguaje natural, deben mostrarse para revisión antes de guardarse. En la versión inicial, prioriza reglas locales previsibles; no dependas de una API de IA.
+Incluye búsqueda global por texto, etiquetas, fechas y tipos de contenido.
+Los resultados deben permitir abrir el registro original y distinguir entre módulos.
+La búsqueda debe funcionar sin conexión y no debe mostrar información eliminada como si estuviera activa.
+20. RECORDATORIOS, ALARMAS Y TEMPORIZADORES
+Incluye:
+• Recordatorios ordinarios.
+• Alarmas de puntualidad cuando el sistema lo permita.
+• Temporizadores generales.
+• Temporizador de concentración o Pomodoro.
+• Recordatorios asociados a tareas, hábitos y rutinas.
+Permite posponer por intervalos rápidos, elegir una hora exacta o utilizar una sugerencia revisable.
+Cuando sea compatible, las notificaciones deben ofrecer acciones como completar, posponer y abrir detalles.
+Incluye horarios de silencio, modos de trabajo, estudio, descanso y sueño, excepciones configurables y agrupación de notificaciones secundarias.
+No programes múltiples alarmas duplicadas. Gestiona correctamente la edición, eliminación, recurrencia, permisos y reinicio del dispositivo.
+Documenta las restricciones de Android y no garantices precisión absoluta si depende de permisos especiales o de la configuración del sistema.
+21. WIDGETS Y ACCESO RÁPIDO
+Diseña una arquitectura que permita añadir widgets de Android para:
+• Resumen del día.
+• Tareas.
+• Hábitos.
+• Captura rápida.
+• Objetivos o bienestar opcionales.
+Los widgets deben utilizar datos persistidos, actualizarse de manera razonable y abrir la pantalla correcta.
+Si la herramienta de generación no puede crear o verificar widgets reales, documenta esa limitación y no los presentes como implementados.
+22. PRIVACIDAD, BLOQUEO Y CONFIGURACIÓN
+Incluye opciones de protección mediante PIN y autenticación biométrica cuando el dispositivo lo permita.
+La protección debe estar implementada realmente; no basta con ocultar pantallas.
+Permite configurar:
+• Tema claro u oscuro.
+• Idioma.
+• Orden de módulos.
+• Secciones de Inicio.
+• Colores y preferencias visuales.
+• Notificaciones.
+• Horarios de silencio.
+• Unidades.
+• Reglas de recordatorio.
+• Preferencias de privacidad.
+Diseña el sistema para múltiples idiomas. No disperses todos los textos por el código: utiliza recursos de localización.
+El usuario es individual en la versión inicial. No inventes un sistema de cuentas o perfiles compartidos.
+23. FUNCIONAMIENTO SIN CONEXIÓN Y SINCRONIZACIÓN FUTURA
+La aplicación debe funcionar sin conexión para crear, consultar, editar y gestionar los datos esenciales.
+No debe requerir iniciar sesión ni conectarse a un servidor para utilizar los módulos principales.
+La sincronización entre dispositivos es opcional y futura. Diseña límites claros para que pueda añadirse sin reescribir todo el sistema.
+Cuando se implemente en una etapa posterior:
+• Detecta conflictos.
+• Conserva información suficiente para compararlos.
+• Permite la resolución manual.
+• No sobrescribe silenciosamente datos.
+• No declara sincronizado un cambio que no se ha confirmado.
+24. COPIAS, IMPORTACIÓN Y EXPORTACIÓN
+Implementa una estrategia de copias de seguridad manuales y automáticas.
+Permite exportar datos en JSON, CSV y PDF según su naturaleza:
+• JSON para una exportación estructurada y restaurable.
+• CSV para tablas y registros tabulares.
+• PDF para informes legibles.
+Define qué contenido puede exportarse a cada formato.
+Una exportación JSON restaurable debe incluir versiones de esquema y las relaciones necesarias para recuperar los datos.
+Valida los archivos importados y avisa antes de sustituir información existente.
+La papelera debe permitir recuperar elementos eliminados durante un periodo configurable o definido por el producto.
+La eliminación definitiva debe distinguirse de la eliminación recuperable.
+25. REGLAS DE AUTOMATIZACIÓN Y PLANIFICACIÓN
+La aplicación puede analizar:
+• Sobrecarga de tareas.
+• Conflictos de horario.
+• Objetivos en riesgo.
+• Falta de tiempo disponible.
+• Tareas vencidas.
+• Hábitos con dificultades de consistencia.
+• Tiempo registrado.
+• Disponibilidad estimada.
+Puede sugerir prioridades, descansos, reprogramaciones y ajustes de objetivos.
+Todas las sugerencias deben explicar brevemente su motivo y permitir aceptar, modificar o rechazar la propuesta.
+No cambies automáticamente compromisos, prioridades, fechas ni objetivos importantes.
+No interpretes una estimación como un hecho seguro. Si faltan datos, informa de ello.
+26. MODELO DE DATOS E INTEGRACIÓN
+Diseña modelos consistentes para las entidades principales, como:
+• Tarea.
+• Proyecto.
+• Subtarea o relación jerárquica de tareas.
+• Evento o actividad programada.
+• Regla de recurrencia.
+• Hábito.
+• Registro de hábito.
+• Rutina y paso de rutina.
+• Nota.
+• Etiqueta.
+• Objetivo.
+• Hito.
+• Registro de bienestar.
+• Persona.
+• Sesión de temporizador.
+• Recordatorio.
+• Preferencia.
+• Registro de actividad e historial.
+• Copia o metadatos de importación y exportación.
+Adapta la estructura final a la arquitectura elegida y evita entidades duplicadas que representen el mismo concepto.
+Usa identificadores estables, relaciones explícitas, fechas normalizadas y migraciones controladas.
+No almacenes un mismo registro por separado en cada pantalla.
+Los módulos deben consultar los repositorios comunes para que una modificación se refleje en todos los lugares relacionados.
+27. ETAPAS DE CONSTRUCCIÓN
+Desarrolla el proyecto en las siguientes etapas.
+Etapa 1 — Base real
+• Crear la estructura Android.
+• Establecer navegación.
+• Definir diseño visual base.
+• Crear modelos de datos.
+• Implementar persistencia local.
+• Crear configuración y preferencias.
+• Preparar estados de interfaz y gestión de errores.
+• Implementar Inicio y captura rápida inicial.
+Etapa 2 — Organización principal
+• Tareas.
+• Proyectos.
+• Calendario.
+• Hábitos.
+• Rutinas.
+• Relaciones entre módulos.
+Etapa 3 — Memoria personal y objetivos
+• Notas.
+• Diario.
+• Objetivos.
+• Hitos.
+• Aprendizaje.
+• Personas y relaciones.
+Etapa 4 — Seguimiento y tiempo
+• Estadísticas.
+• Bienestar.
+• Temporizadores.
+• Recordatorios.
+• Alarmas.
+• Reglas de planificación.
+Etapa 5 — Integración con Android
+• Widgets.
+• Atajos.
+• Acciones de notificación.
+• Compartir contenido.
+• Gestión de segundo plano.
+Etapa 6 — Protección y recuperación
+• Bloqueo.
+• Copias de seguridad.
+• Papelera.
+• Importación y exportación.
+• Revisión de privacidad.
+Etapa 7 — Auditoría final
+• Compilación.
+• Pruebas de persistencia.
+• Pruebas offline.
+• Pruebas de relaciones entre módulos.
+• Pruebas de notificaciones y permisos.
+• Revisión visual.
+• Corrección de defectos.
+Estas etapas pertenecen al mismo proyecto. No generes aplicaciones independientes para cada etapa.
+28. CRITERIOS DE ACEPTACIÓN
+Considera que la base inicial está bien construida cuando:
+1. La aplicación puede abrirse y navegar sin conexión.
+2. La interfaz no depende de datos ficticios para parecer completa.
+3. Los registros iniciales pueden crearse, editarse y eliminarse.
+4. Los datos persisten tras cerrar y volver a abrir la aplicación.
+5. Los módulos consultan una fuente de datos coherente.
+6. Las relaciones básicas entre tareas, proyectos, notas y objetivos funcionan.
+7. Los estados vacíos y errores se muestran correctamente.
+8. Las preferencias configuradas persisten.
+9. La interfaz es consistente en las pantallas principales.
+10. El proyecto puede exportarse y continuarse fuera de la herramienta de generación.
+11. Los errores conocidos y las funciones pendientes están documentados.
+12. No se declara como terminado nada que no haya sido comprobado.
+29. PRIMERA EJECUCIÓN
+Comienza inspeccionando las capacidades reales del entorno de generación y define una estructura compatible con el proyecto Android.
+Después:
+1. Crea el proyecto base.
+2. Implementa el sistema visual y la navegación.
+3. Implementa la persistencia local y los modelos iniciales.
+4. Construye Inicio y los primeros flujos funcionales.
+5. Ejecuta las comprobaciones disponibles.
+6. Explica cómo continuar con la siguiente etapa.
+No intentes fingir que todos los módulos están terminados en la primera ejecución.
+Si el entorno alcanza un límite de generación, deja el proyecto en un estado coherente, identifica lo que falta y proporciona instrucciones concretas para continuar desde el código existente.
+30. INFORME DE ENTREGA
+Al terminar, informa de manera precisa:
+• Archivos y estructura creados.
+• Tecnología y arquitectura utilizadas.
+• Funciones implementadas.
+• Funciones realmente verificadas.
+• Pruebas ejecutadas y resultados.
+• Funciones incompletas.
+• Limitaciones del entorno.
+• Pasos para exportar, compilar, instalar y continuar el proyecto.
+No inventes resultados positivos ni ocultes errores.
+La prioridad final es entregar una base real de L2 Life que pueda desarrollarse progresivamente, mantener sus datos y convertirse en una aplicación integral de calidad.
