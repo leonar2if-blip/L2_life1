@@ -44,7 +44,7 @@ object WidgetUpdateHelper {
                 val habitsDone = habitLogs.count { it.completed }
 
                 // 3. Focus minutes
-                val focusSessions = db.focusDao().observeSessionsForDay(epochDay).first()
+                val focusSessions = db.focusDao().observeSessionsForDate(epochDay).first()
                 val focusMinutes = focusSessions.sumOf { it.durationMinutes }
 
                 updateDaySummaryWidgets(

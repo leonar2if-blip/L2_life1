@@ -21,14 +21,11 @@ object ShareHelper {
     }
 
     fun shareWeeklyReview(context: Context, review: WeeklyReviewItem) {
-        val title = "Revisión Semanal L2 Life (${review.weekLabel})"
+        val title = "Revisión Semanal L2 Life"
         val sb = StringBuilder()
         sb.appendLine("📊 $title")
         sb.appendLine("─────────────────────────")
-        sb.appendLine("• Puntuación: ${review.productivityScore}/10")
-        sb.appendLine("• Tareas completadas: ${review.completedTasksCount}")
-        sb.appendLine("• Minutos de enfoque: ${review.focusMinutes} min")
-        sb.appendLine("• Días activos de hábitos: ${review.habitsLoggedDays}")
+        sb.appendLine("• Energía: ${review.energyRating}/5 | Foco: ${review.productivityRating}/5")
         if (review.accomplishments.isNotBlank()) {
             sb.appendLine()
             sb.appendLine("🏆 Logros y avances:")
@@ -39,10 +36,15 @@ object ShareHelper {
             sb.appendLine("⚠️ Retos y dificultades:")
             sb.appendLine(review.challenges)
         }
-        if (review.nextWeekPriorities.isNotBlank()) {
+        if (review.nextWeekFocus.isNotBlank()) {
             sb.appendLine()
             sb.appendLine("🎯 Prioridades próxima semana:")
-            sb.appendLine(review.nextWeekPriorities)
+            sb.appendLine(review.nextWeekFocus)
+        }
+        if (review.notes.isNotBlank()) {
+            sb.appendLine()
+            sb.appendLine("📝 Notas adicionales:")
+            sb.appendLine(review.notes)
         }
         sb.appendLine()
         sb.appendLine("— Generado desde L2 Life")

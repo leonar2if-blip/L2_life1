@@ -36,14 +36,13 @@ class TaskActionReceiver : BroadcastReceiver() {
                         db.taskDao().updateTaskStatus(
                             id = taskId,
                             status = "COMPLETED",
-                            completedAt = now,
-                            updatedAt = now
+                            completedAt = now
                         )
                         NotificationHelper.cancelNotification(context, notificationId)
                         ReminderScheduler.cancelTaskReminder(context, taskId)
                         WidgetUpdateHelper.updateAllWidgets(context)
                     } finally {
-                        pendingResult.finish()
+                        pendingResult?.finish()
                     }
                 }
             }

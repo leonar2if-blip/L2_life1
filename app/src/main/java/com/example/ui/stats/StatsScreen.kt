@@ -458,7 +458,7 @@ fun StatsScreen(
                                 Row {
                                     IconButton(
                                         onClick = {
-                                            val shareTitle = "Revisión Semanal L2 Life (${state.currentWeekLabel})"
+                                            val shareTitle = "Revisión Semanal L2 Life (${state.weekRangeLabel})"
                                             val shareText = buildString {
                                                 appendLine("📊 $shareTitle")
                                                 appendLine("• Energía: ${review.energyRating}/5 | Foco: ${review.productivityRating}/5")

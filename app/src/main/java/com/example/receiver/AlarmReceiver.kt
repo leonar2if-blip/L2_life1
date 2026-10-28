@@ -46,7 +46,7 @@ class AlarmReceiver : BroadcastReceiver() {
                             )
                         }
                     } finally {
-                        pendingResult.finish()
+                        pendingResult?.finish()
                     }
                 }
             }
@@ -58,7 +58,7 @@ class AlarmReceiver : BroadcastReceiver() {
                         WidgetUpdateHelper.updateAllWidgets(context)
                         ReminderScheduler.scheduleDailyMidnightCheck(context)
                     } finally {
-                        pendingResult.finish()
+                        pendingResult?.finish()
                     }
                 }
             }

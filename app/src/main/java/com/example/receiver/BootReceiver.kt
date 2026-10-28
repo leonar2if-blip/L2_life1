@@ -38,7 +38,7 @@ class BootReceiver : BroadcastReceiver() {
                     WidgetUpdateHelper.updateAllWidgets(context)
                     ShortcutHelper.updateDynamicShortcuts(context)
                 } finally {
-                    pendingResult.finish()
+                    pendingResult?.finish()
                 }
             }
         }
