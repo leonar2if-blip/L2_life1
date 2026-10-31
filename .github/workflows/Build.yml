@@ -15,9 +15,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: MARKER TEST 99
-        run: echo "SI VES ESTO ES EL ARCHIVO NUEVO"
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -33,6 +30,7 @@ jobs:
         with:
           accept-android-sdk-licenses: true
           log-accepted-android-sdk-licenses: true
+          packages: 'platform-tools'
 
       - name: Create .env file
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
