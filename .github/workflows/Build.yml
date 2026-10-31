@@ -48,12 +48,25 @@ jobs:
             -validity 10000 \
             -dname "CN=Android Debug,O=Android,C=US"
 
+      - name: Generate release keystore
+        if: github.ref == 'refs/heads/main'
+        run: |
+          keytool -genkeypair -v \
+            -keystore my-upload-key.jks \
+            -storepass android \
+            -alias upload \
+            -keypass android \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -dname "CN=Upload,O=App,C=US"
+
       - name: Create .env file
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
         run: |
           cat > .env << EOF
-          SUPABASE_URL=${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_URL=${{ secrets.SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY || 'placeholder-anon-key' }}
           EOF
 
       - name: Build Debug APK
@@ -69,6 +82,10 @@ jobs:
 
       - name: Build Release APK
         if: github.ref == 'refs/heads/main'
+        env:
+          KEYSTORE_PATH: ${{ github.workspace }}/my-upload-key.jks
+          STORE_PASSWORD: android
+          KEY_PASSWORD: android
         run: gradle assembleRelease --no-daemon --stacktrace --warning-mode all
 
       - name: Upload Release APK
