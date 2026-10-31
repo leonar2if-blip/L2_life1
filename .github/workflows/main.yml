@@ -7,51 +7,86 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+# Permisos mínimos: solo lectura del repo
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: gradle
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
+      # setup-android sin 'packages' → ya instala cmdline-tools y acepta licencias.
+      # Si quieres reproducibilidad total, descomenta la línea 'packages'.
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          accept-android-sdk-licenses: true
+          log-accepted-android-sdk-licenses: true
+          # packages: 'platform-tools "build-tools;34.0.0" "platforms;android-34"'
 
-    - name: Create .env file
-      run: |
-        cat > .env << 'EOF'
-        SUPABASE_URL=${{ secrets.SUPABASE_URL }}
-        SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
-        EOF
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      # Solo se crean las .env si los secrets están disponibles
+      # (en PRs desde forks, los secrets llegan vacíos y esto se saltaría)
+      - name: Create .env file
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+        run: |
+          cat > .env << EOF
+          SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+          EOF
 
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug --no-daemon --stacktrace
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-    - name: Upload Debug APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-debug
-        path: app/build/outputs/apk/debug/*.apk
-        retention-days: 7
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --no-daemon --stacktrace --warning-mode all
 
-    - name: Build Release APK
-      if: github.ref == 'refs/heads/main'
-      run: ./gradlew assembleRelease --no-daemon --stacktrace
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/*.apk
+          retention-days: 7
+          if-no-files-found: error
 
-    - name: Upload Release APK
-      if: github.ref == 'refs/heads/main'
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-release
-        path: app/build/outputs/apk/release/*.apk
-        retention-days: 30
+      # ------------------------------------------------------------------
+      # Release: solo en pushes a main (no en PRs ni en fix/*).
+      # Sale SIN FIRMAR por defecto. Si más adelante quieres firmarlo,
+      # descomenta los pasos marcados como [SIGNING] y añade los secrets
+      # KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD.
+      # ------------------------------------------------------------------
+
+      # [SIGNING] - Descomentar si vas a firmar
+      # - name: Decode keystore
+      #   if: github.ref == 'refs/heads/main'
+      #   run: |
+      #     echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > app/release.keystore
+
+      - name: Build Release APK
+        if: github.ref == 'refs/heads/main'
+        # [SIGNING] descomentar env si firmas:
+        # env:
+        #   KEYSTORE_PATH: ${{ github.workspace }}/app/release.keystore
+        #   KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        #   KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        #   KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleRelease --no-daemon --stacktrace --warning-mode all
+
+      - name: Upload Release APK
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: app/build/outputs/apk/release/*.apk
+          retention-days: 30
+          if-no-files-found: error
